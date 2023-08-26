@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:speechsummarizer/states/homestate.dart';
+import 'package:speechsummarizer/states/homescreen.dart';
 import 'color_schemes.g.dart';
 
 void main() {

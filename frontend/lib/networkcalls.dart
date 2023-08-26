@@ -36,7 +36,7 @@ Future<String?> mediaConvert(String fileLocation) async {
   return null;
 }
 
-gbucketUpload(String flacLocation) async {
+Future<bool> gbucketUpload(String flacLocation) async {
   var headers = {
     'Authorization': 'Bearer $gbucketapi',
     'Content-Type': 'audio/flac',
@@ -50,5 +50,11 @@ gbucketUpload(String flacLocation) async {
   List<int> binaryData = await File(flacLocation).readAsBytes();
   request.bodyBytes = binaryData;
   request.headers.addAll(headers);
-  await request.send();
+  http.StreamedResponse response = await request.send();
+  if (response.statusCode == 200) {
+    print('done pushing');
+    return true;
+  } else {
+    return false;
+  }
 }

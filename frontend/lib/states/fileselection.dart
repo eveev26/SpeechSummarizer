@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:speechsummarizer/components/uploadcard.dart';
 import 'package:speechsummarizer/networkcalls.dart';
+import 'package:speechsummarizer/states/textprocess.dart';
 
 class FileSelection extends StatefulWidget {
   const FileSelection({super.key});
@@ -25,10 +26,10 @@ class _FileSelectionState extends State<FileSelection> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              _fileSelected
+              _fileSelected && filelocation != ''
                   ? UploadCard(
                       filename: trimLocation(filelocation),
-                      filesize: File(filelocation).lengthSync() / 2,
+                      filesize: File(filelocation).lengthSync() / 1000,
                     )
                   : Container(),
               const Spacer(),
@@ -47,7 +48,6 @@ class _FileSelectionState extends State<FileSelection> {
                         filelocation = value!;
                         _fileSelected = true;
                       });
-                      print(filelocation);
                     });
                   },
                   child: const Text(
@@ -68,12 +68,18 @@ class _FileSelectionState extends State<FileSelection> {
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                   ),
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const FileSelection()));
-                  },
+                  onPressed: _fileSelected && filelocation != ''
+                      ? () {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      TextProcess(
+                                        filelocation: filelocation,
+                                      )),
+                              (Route<dynamic> route) => false);
+                        }
+                      : null,
                   child: const Text(
                     'Begin',
                     style: TextStyle(fontSize: 23),

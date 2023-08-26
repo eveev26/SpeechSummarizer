@@ -1,9 +1,10 @@
-var transcript = require('./transcript');
+var transcript = require('./test_transcript');
 const cohere = require('cohere-ai');
 cohere.init('MMUi7kMlMrfBI0cGhXM9w8fngkwFyNPtjaGWWF4S'); // This is your trial API key
 const tokens = ~~(transcript.transcript().split(" ").length/2);
 
-module.exports= async () => {
+export function generate_meeting_minutes(){
+async () => {
     const response = await cohere.generate({
       model: 'command',
       prompt: `The output is as follows:\n
@@ -43,4 +44,5 @@ module.exports= async () => {
         return_likelihoods: 'NONE'
     });
     console.log(response3.body.generations[0].text);
+    }
 };

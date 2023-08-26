@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
-const speech_1 = require("./routes/speech");
+const speech_js_1 = require("./src/routes/speech.js");
 const generate_notes_1 = require("./summarize/generate_notes");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
@@ -16,7 +16,7 @@ const port = 8080;
 // app.post('/', (req: Request, res: Response) => {
 //   res.send('Express + TypeScript Server');
 // });
-app.use('/speech-to-text', speech_1.textRouter);
+app.use('/speech-to-text', speech_js_1.textRouter);
 app.listen(port, () => {
     console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
     (0, generate_notes_1.generate_meeting_minutes)();

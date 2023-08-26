@@ -1,6 +1,6 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
-import {textRouter} from './routes/speech';
+import {textRouter} from './src/routes/speech.js';
 import { generate_meeting_minutes } from "./summarize/generate_notes";
 
 dotenv.config();

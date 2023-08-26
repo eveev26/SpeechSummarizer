@@ -23,15 +23,16 @@ String trimLocation(String longString) {
 Future<String?> mediaConvert(String fileLocation) async {
   String fileFlac =
       '${fileLocation.substring(0, fileLocation.lastIndexOf('.') + 1)}flac';
-
+  fileFlac = fileFlac.replaceAll(" ", "");
   try {
-    final session =
-        await FFmpegKit.execute('-i $fileLocation -vn -acodec flac $fileFlac');
+    final session = await FFmpegKit.execute(
+        '-i \'$fileLocation\' -vn -c:a -acodec flac $fileFlac');
     final returnCode = await session.getReturnCode();
-    if (ReturnCode.isSuccess(returnCode)) {
+    if (ReturnCode.isSuccess(returnCode) || File(fileFlac).existsSync()) {
       return fileFlac;
     } else {
-      return fileFlac;
+      print('FAILED');
+      return '';
     }
   } catch (e) {}
 
@@ -67,11 +68,9 @@ Future<String?> audiosummarizer(String filename) async {
   final url = Uri.parse('http://34.134.208.93:3002/speech-to-text');
   final headers = {
     'Content-Type': 'application/json',
-    // Add any other headers as needed
   };
   final body = jsonEncode({
     'file_url': gbucketlocation,
-    // Add more key-value pairs as needed
   });
   print(gbucketlocation);
   final response = await http.post(url, headers: headers, body: body);

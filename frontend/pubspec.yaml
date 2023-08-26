@@ -38,6 +38,7 @@ dependencies:
   file_picker: ^5.3.3
   ffmpeg_kit_flutter: ^5.1.0
   http: ^1.1.0
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_test:
@@ -91,3 +92,9 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+flutter_launcher_icons:
+    android: "launcher_icon"
+    ios: true
+    remove_alpha_ios: true
+    image_path: "../assets/icon.png"
+    min_sdk_android: 21 # android min sdk min:16, default 21

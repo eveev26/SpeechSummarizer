@@ -27,9 +27,9 @@ class _TextProcessState extends State<TextProcess>
     )..addListener(() {
         setState(() {});
       });
-    Future.delayed(Duration.zero, () async {
-      String? value = await mediaConvert(widget.filelocation);
-      if (value != null) {
+
+    mediaConvert(widget.filelocation).then((value) {
+      if (value != null && value != '') {
         setState(() {
           flaclocation = value;
           controller.animateTo(0.25,
@@ -53,11 +53,13 @@ class _TextProcessState extends State<TextProcess>
               });
               print(summary);
               Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => SummaryScreen(
-                            summary: summary,
-                          )));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SummaryScreen(
+                    summary: summary,
+                  ),
+                ),
+              );
             });
           }
         });
@@ -81,12 +83,32 @@ class _TextProcessState extends State<TextProcess>
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-          child: Column(
-        children: <Widget>[
-          LinearProgressIndicator(
-            value: controller.value,
-          ),
-        ],
+          child: Align(
+        alignment: Alignment.center,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            CircularProgressIndicator(
+              value: controller.value,
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height / 3),
+            flacconversion
+                ? Container(
+                    padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Audio extraction failed, \nplease submit an audio file',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ],
+                    ),
+                  )
+                : Container()
+          ],
+        ),
       )),
     );
   }

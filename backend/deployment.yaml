@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: speech-to-text-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: speech-to-text
+  template:
+    metadata:
+      labels:
+        app: speech-to-text
+    spec:
+      containers:
+        - name: speech-to-text
+          image: gcr.io/speech-to-text-397023/speech:v1
+          ports:
+            - containerPort: 8080

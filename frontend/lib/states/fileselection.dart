@@ -1,6 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:speechsummarizer/components/uploadcard.dart';
 import 'package:speechsummarizer/networkcalls.dart';
-import 'package:speechsummarizer/color_schemes.g.dart';
 
 class FileSelection extends StatefulWidget {
   const FileSelection({super.key});
@@ -10,6 +12,8 @@ class FileSelection extends StatefulWidget {
 }
 
 class _FileSelectionState extends State<FileSelection> {
+  String filelocation = '';
+  bool _fileSelected = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,20 +21,62 @@ class _FileSelectionState extends State<FileSelection> {
           child: Align(
         alignment: Alignment.center,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(25, 10, 25, 40),
+          padding: const EdgeInsets.fromLTRB(25, 40, 25, 10),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              Container(
+              _fileSelected
+                  ? UploadCard(
+                      filename: trimLocation(filelocation),
+                      filesize: File(filelocation).lengthSync() / 2,
+                    )
+                  : Container(),
+              const Spacer(),
+              SizedBox(
+                height: 65,
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height / 3,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? darkColorScheme.primaryContainer
-                        : lightColorScheme.primaryContainer,
-                    shape: BoxShape.rectangle,
-                    borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+                child: FilledButton.tonal(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                  ),
+                  onPressed: () {
+                    uploadFile().then((value) {
+                      setState(() {
+                        filelocation = value!;
+                        _fileSelected = true;
+                      });
+                      print(filelocation);
+                    });
+                  },
+                  child: const Text(
+                    'Choose a file',
+                    style: TextStyle(fontSize: 23),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              SizedBox(
+                height: 65,
+                width: MediaQuery.of(context).size.width,
+                child: FilledButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const FileSelection()));
+                  },
+                  child: const Text(
+                    'Begin',
+                    style: TextStyle(fontSize: 23),
                   ),
                 ),
               ),

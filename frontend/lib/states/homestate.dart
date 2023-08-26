@@ -29,7 +29,16 @@ class _HomeStateState extends State<HomeState> {
                 const SizedBox(
                   height: 15,
                 ),
-                Text(trimLocation(fileLocation)),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'File: ${trimLocation(fileLocation)}',
+                  style: const TextStyle(fontSize: 20),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -55,7 +64,6 @@ class _HomeStateState extends State<HomeState> {
                               flaclocation = value;
                             });
                           }
-
                           gbucketUpload(flaclocation);
                         },
                         child: const Text('Start')),

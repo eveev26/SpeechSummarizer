@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:speechsummarizer/networkcalls.dart';
-import 'dart:ui' as ui;
-
 import 'package:speechsummarizer/states/fileselection.dart';
 
 class HomeState extends StatefulWidget {

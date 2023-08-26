@@ -27,7 +27,8 @@ class _TextProcessState extends State<TextProcess>
     )..addListener(() {
         setState(() {});
       });
-    mediaConvert(widget.filelocation).then((value) {
+    Future.delayed(Duration.zero, () async {
+      String? value = await mediaConvert(widget.filelocation);
       if (value != null) {
         setState(() {
           flaclocation = value;
@@ -66,6 +67,7 @@ class _TextProcessState extends State<TextProcess>
         });
       }
     });
+
     super.initState();
   }
 

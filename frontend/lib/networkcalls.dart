@@ -26,7 +26,7 @@ Future<String?> mediaConvert(String fileLocation) async {
 
   try {
     final session =
-        await FFmpegKit.execute('-i $fileLocation -acodec flac $fileFlac');
+        await FFmpegKit.execute('-i $fileLocation -vn -acodec flac $fileFlac');
     final returnCode = await session.getReturnCode();
     if (ReturnCode.isSuccess(returnCode)) {
       return fileFlac;
@@ -49,6 +49,7 @@ Future<bool> gbucketUpload(String flacLocation) async {
       'https://storage.googleapis.com/upload/storage/v1/b/audio-file-hackathon/o?uploadType=media&name=${Uri.encodeComponent(trimLocation(flacLocation))}',
     ),
   );
+  print(flacLocation);
   List<int> binaryData = await File(flacLocation).readAsBytes();
   request.bodyBytes = binaryData;
   request.headers.addAll(headers);

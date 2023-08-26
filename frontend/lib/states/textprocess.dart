@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:speechsummarizer/networkcalls.dart';
+import 'package:speechsummarizer/states/summaryscreen.dart';
 
 class TextProcess extends StatefulWidget {
   final String filelocation;
@@ -15,6 +16,7 @@ class _TextProcessState extends State<TextProcess>
   double progress = 0;
   String? flaclocation;
   bool flacconversion = false;
+  late String summary;
   @override
   void initState() {
     controller = AnimationController(
@@ -40,6 +42,21 @@ class _TextProcessState extends State<TextProcess>
               controller.animateTo(0.5,
                   duration: const Duration(seconds: 1),
                   curve: Curves.fastEaseInToSlowEaseOut);
+            });
+            audiosummarizer(trimLocation(flaclocation!)).then((value) {
+              setState(() {
+                summary = value!;
+                controller.animateTo(1,
+                    duration: const Duration(seconds: 1),
+                    curve: Curves.fastEaseInToSlowEaseOut);
+              });
+              print(summary);
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => SummaryScreen(
+                            summary: summary,
+                          )));
             });
           }
         });

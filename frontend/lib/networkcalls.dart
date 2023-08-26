@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:speechsummarizer/keys.dart';
@@ -56,5 +58,28 @@ Future<bool> gbucketUpload(String flacLocation) async {
     return true;
   } else {
     return false;
+  }
+}
+
+Future<String?> audiosummarizer(String filename) async {
+  var gbucketlocation = 'gs://audio-file-hackathon/$filename';
+  final url = Uri.parse('http://34.134.208.93:3002/speech-to-text');
+  final headers = {
+    'Content-Type': 'application/json',
+    // Add any other headers as needed
+  };
+  final body = jsonEncode({
+    'file_url': gbucketlocation,
+    // Add more key-value pairs as needed
+  });
+  print(gbucketlocation);
+  final response = await http.post(url, headers: headers, body: body);
+  if (response.statusCode == 200 || response.statusCode == 201) {
+    print('Worked: ${response.statusCode}');
+    final responseBody = json.decode(response.body);
+    print(responseBody.toString());
+    return responseBody.toString();
+  } else {
+    print('Failed: ${response.statusCode}');
   }
 }

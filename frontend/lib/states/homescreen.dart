@@ -16,7 +16,7 @@ class _HomeStateState extends State<HomeState> {
     return Scaffold(
       body: CustomPaint(
         // size: const Size(300, 200),
-        painter: WavePainter(),
+        painter: Painter(),
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
@@ -74,16 +74,34 @@ class _HomeStateState extends State<HomeState> {
   }
 }
 
-class WavePainter extends CustomPainter {
+class Painter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    var paint = Paint()
-      ..color = Colors.red
+    final center = Offset(size.width / 2, size.height / 2);
+    var red = Paint()
+      ..color = const Color(0xFFB2495B)
       ..strokeWidth = 15;
-
-    Offset center = Offset(size.width / 20, size.height / 5);
-
-    canvas.drawCircle(center, 50, paint);
+    var blue = Paint()
+      ..color = const Color(0xFF49B2A1)
+      ..strokeWidth = 15;
+    var green = Paint()
+      ..color = const Color(0xFF8FB249)
+      ..strokeWidth = 15;
+    Offset circleoffsets = Offset(size.width / 4, size.height / 5);
+    Rect rect = Offset(size.width - size.width / 1.5, size.height / 30) &
+        const Size(100, 100);
+    final path = Path()
+      ..moveTo(center.dx - 20, center.dy - 50) // Top point
+      ..lineTo(center.dx - 70, center.dy + 50) // Bottom-left point
+      ..lineTo(center.dx + 30, center.dy + 50) // Bottom-right point
+      ..close();
+    canvas.drawPath(path, blue);
+    const rotationAngle = 45 * (3.141592653589793 / 180);
+    canvas.drawCircle(circleoffsets, 50, red);
+    //canvas.save();
+    canvas.translate(rect.center.dx, rect.center.dy);
+    canvas.rotate(rotationAngle);
+    canvas.drawRect(rect, green);
   }
 
   @override

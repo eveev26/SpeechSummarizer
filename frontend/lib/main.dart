@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:speechsummarizer/states/homestate.dart';
+import 'package:speechsummarizer/states/homescreen.dart';
 import 'color_schemes.g.dart';
 
 void main() {
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       title: 'SpeechSummarize',
       theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
       darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
-      themeMode: ThemeMode.light,
+      themeMode: ThemeMode.system,
       home: const HomeState(),
     );
   }

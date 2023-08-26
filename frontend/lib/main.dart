@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       title: 'SpeechSummarize',
       theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
       darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
-      themeMode: ThemeMode.light,
+      themeMode: ThemeMode.system,
       home: const HomeState(),
     );
   }

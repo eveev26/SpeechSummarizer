@@ -37,7 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   file_picker: ^5.3.3
   ffmpeg_kit_flutter: ^5.1.0
-  dio: ^5.3.2
+  http: ^1.1.0
 
 dev_dependencies:
   flutter_test:

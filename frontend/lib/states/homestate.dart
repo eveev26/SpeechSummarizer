@@ -1,8 +1,5 @@
-import 'package:ffmpeg_kit_flutter/return_code.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
-import 'package:dio/dio.dart';
+import 'package:speechsummarizer/networkcalls.dart';
 
 class HomeState extends StatefulWidget {
   const HomeState({super.key});
@@ -50,16 +47,16 @@ class _HomeStateState extends State<HomeState> {
                       width: 20,
                     ),
                     FilledButton(
-                        onPressed: () {
-                          mediaConvert(fileLocation).then((value) {
-                            if (value != null) {
-                              setState(() {
-                                flaclocation = value;
-                              });
-                            }
-                          }).whenComplete(() {
-                            gbucketUpload(flaclocation);
-                          });
+                        onPressed: () async {
+                          String? value = await mediaConvert(fileLocation);
+
+                          if (value != null) {
+                            setState(() {
+                              flaclocation = value;
+                            });
+                          }
+
+                          gbucketUpload(flaclocation);
                         },
                         child: const Text('Start')),
                   ],
@@ -73,30 +70,6 @@ class _HomeStateState extends State<HomeState> {
   }
 }
 
-Future<String?> uploadFile() async {
-  String? fileLocation = '';
-  FilePickerResult? tempLocation = await FilePicker.platform.pickFiles();
-  if (tempLocation != null) {
-    fileLocation = tempLocation.files.single.path;
-  } else {}
-  return fileLocation;
-}
-
 String trimLocation(String longString) {
   return longString.substring(longString.lastIndexOf('/') + 1);
 }
-
-Future<String?> mediaConvert(String fileLocation) async {
-  String fileFlac =
-      '${fileLocation.substring(0, fileLocation.lastIndexOf('.') + 1)}flac';
-  FFmpegKit.execute('-i $fileLocation -acodec flac $fileFlac')
-      .then((session) async {
-    final returnCode = await session.getReturnCode();
-    if (ReturnCode.isSuccess(returnCode)) {
-      return fileFlac;
-    }
-  });
-  return null;
-}
-
-gbucketUpload(String flacLocation) async {}

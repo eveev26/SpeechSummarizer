@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:speechsummarizer/networkcalls.dart';
 import 'dart:ui' as ui;
 
+import 'package:speechsummarizer/states/fileselection.dart';
+
 class HomeState extends StatefulWidget {
   const HomeState({super.key});
 
@@ -16,67 +18,57 @@ class _HomeStateState extends State<HomeState> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomPaint(
-        size: const Size(300, 200),
+        // size: const Size(300, 200),
         painter: WavePainter(),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-            child: Align(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const Text(
-                    'SpeechSummarizer',
-                    style: TextStyle(fontSize: 35),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    'File: ${trimLocation(fileLocation)}',
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: FilledButton.tonal(
-                        onPressed: () {
-                          uploadFile().then((value) {
-                            setState(() {
-                              fileLocation = value!;
-                            });
-                          });
-                        },
-                        child: const Text('Upload')),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  SizedBox(
+            padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                const Text(
+                  'SpeechSummarizer',
+                  style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'The easiest way to simplify your meetings and other forms of media',
+                  style: TextStyle(fontSize: 15),
+                ),
+                const SizedBox(
+                  height: 45,
+                ),
+                Container(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10000),
+                    ),
+                    height: 65,
                     width: MediaQuery.of(context).size.width,
                     child: FilledButton(
-                        onPressed: () async {
-                          if (fileLocation != '') {
-                            String? value = await mediaConvert(fileLocation);
-
-                            if (value != null) {
-                              setState(() {
-                                flaclocation = value;
-                              });
-                            }
-                            gbucketUpload(flaclocation);
-                          }
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                15.0), // Adjust this value for sharper corners
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const FileSelection()));
                         },
-                        child: const Text('Start')),
+                        child: const Text(
+                          'Start',
+                          style: TextStyle(fontSize: 23),
+                        )),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

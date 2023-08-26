@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import {textRouter} from './src/routes/speech.js';
-import { generate_meeting_minutes } from "./summarize/generate_notes";
+
 
 dotenv.config();
 
@@ -19,5 +19,5 @@ app.use('/speech-to-text', textRouter);
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
-  generate_meeting_minutes();
+  
 });

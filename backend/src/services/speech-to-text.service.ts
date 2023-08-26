@@ -13,9 +13,12 @@ export const transcribe = async function transcribeSpeech(gcsUri: string): Promi
         uri: gcsUri,
     };
     const config: protos.google.cloud.speech.v1.IRecognitionConfig = {
-        encoding: 'FLAC',
+     //   encoding: 'FLAC',
+    //    audioChannelCount: 2,
+        encoding: 'LINEAR16',
+        sampleRateHertz: 16000,
         languageCode: 'en-US',
-        audioChannelCount: 2,
+     
 
     };
     const request: protos.google.cloud.speech.v1.IRecognizeRequest = {

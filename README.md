@@ -5,9 +5,9 @@
 
 Simplify your meetings
 
-![Screenshot of SpeechSummarizer in Dark Mode](assets/dark.png?raw=true)
+A mobile flutter app to summarize long meetings into readable notes
 
-A flutter mobile app to summarize long meetings into readable notes
+![Screenshot of SpeechSummarizer in Dark Mode](assets/dark.png?raw=true)
 
 ## Setup
 
@@ -30,4 +30,18 @@ mv Payload.zip SpeechSummarizer.ipa
 ```bash
 flutter build apk --split-per-abi --release -v
 flutter build appbundle --release -v
+```
+
+## Backend Deployment (via GCP)
+
+```bash
+docker buildx build —platform linux/amd64 -t <gcr-url>
+sudo gcloud auth login
+sudo gcloud set project <project-name>
+sudo gcloud auth activate-service-account <@devloper.gserviceaccount.com id> --key-file=<path to auth key>
+sudo gcloud auth configure-docker
+sudo docker push <gcr-url>
+# Modify deployment.yaml to current docker image path
+kubectl apply -f deployment.yaml
+# Expose service by adding endpoint port and target port (found in deployment.yaml)
 ```

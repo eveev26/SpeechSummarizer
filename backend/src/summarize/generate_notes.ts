@@ -45,5 +45,5 @@ export const return_meeting_minutes = async function return_meeting_minutes(tran
         return_likelihoods: 'NONE'
     });
     console.log(response3.body.generations[0].text);
-    return response3.body.generations[0].text;
+    return response.body.generations[0].text + '\n\n'+ response2.body.generations[0].text + '\n\n'+ response3.body.generations[0].text;
 }

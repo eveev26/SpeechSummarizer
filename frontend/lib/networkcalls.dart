@@ -34,11 +34,12 @@ Future<String?> mediaConvert(String fileLocation) async {
       } else {
         return '';
       }
-    } catch (e) {}
+    } catch (e) {
+      return '';
+    }
   } else {
     return fileLocation;
   }
-  return null;
 }
 
 Future<bool> gbucketUpload(String flacLocation) async {

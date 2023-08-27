@@ -27,7 +27,8 @@ export const transcribe = async function transcribeSpeech(gcsUri: string): Promi
     };
 
     try {
-        const [response] = await client.recognize(request);
+        const [operation] = await client.longRunningRecognize(request);
+        const [response] = await operation.promise();
 
         if (response.results && response.results.length > 0) {
             const transcription = response.results

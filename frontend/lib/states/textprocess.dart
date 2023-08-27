@@ -34,7 +34,7 @@ class _TextProcessState extends State<TextProcess> {
               audiosummarizer(trimLocation(flaclocation!)).then((value) {
                 if (value != null) {
                   setState(() {
-                    summary = value!;
+                    summary = value;
                   });
                   Navigator.pushReplacement(
                     context,
@@ -109,7 +109,7 @@ class _TextProcessState extends State<TextProcess> {
                           ),
                         ),
                         onPressed: () {
-                          Navigator.push(
+                          Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => const FileSelection()));

@@ -64,7 +64,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                       ),
                     ),
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context) => const FileSelection()));

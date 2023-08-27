@@ -42,22 +42,22 @@ class _HomeStateState extends State<HomeState> {
                   height: 65,
                   width: MediaQuery.of(context).size.width,
                   child: FilledButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              15.0), // Adjust this value for sharper corners
-                        ),
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
                       ),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const FileSelection()));
-                      },
-                      child: const Text(
-                        'Start',
-                        style: TextStyle(fontSize: 23),
-                      )),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const FileSelection()));
+                    },
+                    child: const Text(
+                      'Start',
+                      style: TextStyle(fontSize: 23),
+                    ),
+                  ),
                 ),
               ],
             ),

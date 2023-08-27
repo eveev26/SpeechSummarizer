@@ -30,10 +30,6 @@ class _UploadCardState extends State<UploadCard> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              // const Text(
-              //   'Selected File: ',
-              //   style: TextStyle(fontSize: 20),
-              // ),
               Text(
                 (widget.filename.length > 29)
                     ? '${widget.filename.substring(0, 20)}...${widget.filename.substring(widget.filename.length - 7)}'

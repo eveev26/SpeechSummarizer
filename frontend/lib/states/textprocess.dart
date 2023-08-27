@@ -13,7 +13,7 @@ class TextProcess extends StatefulWidget {
 }
 
 class _TextProcessState extends State<TextProcess> {
-  double progress = 0;
+  String progress = 'Converting audio formats';
   String? flaclocation;
   bool flacconversion = false;
   late String summary;
@@ -23,23 +23,38 @@ class _TextProcessState extends State<TextProcess> {
       if (value != null && value != '') {
         setState(() {
           flaclocation = value;
+          progress = 'Uploading file to cloud storage';
         });
-
         gbucketUpload(flaclocation!).then((value) {
           if (value) {
-            audiosummarizer(trimLocation(flaclocation!)).then((value) {
-              setState(() {
-                summary = value!;
-              });
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SummaryScreen(
-                    summary: summary,
-                  ),
-                ),
-              );
+            setState(() {
+              progress = 'Using AI to transcribe and summarize';
             });
+            try {
+              audiosummarizer(trimLocation(flaclocation!)).then((value) {
+                if (value != null) {
+                  setState(() {
+                    summary = value!;
+                  });
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SummaryScreen(
+                        summary: summary,
+                      ),
+                    ),
+                  );
+                } else {
+                  setState(() {
+                    flacconversion = true;
+                  });
+                }
+              });
+            } catch (e) {
+              setState(() {
+                flacconversion = true;
+              });
+            }
           }
         });
       } else {
@@ -71,8 +86,8 @@ class _TextProcessState extends State<TextProcess> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Audio extraction failed, \nplease submit an audio file',
-                            style: TextStyle(fontSize: 20),
+                            '           Meeting Too Long \nPlease submit a shorter meeting',
+                            style: TextStyle(fontSize: 17),
                           ),
                         ],
                       ),
@@ -125,6 +140,17 @@ class _TextProcessState extends State<TextProcess> {
                             ? darkColorScheme.primary
                             : lightColorScheme.primary,
                       ))
+                  : Container(),
+              !flacconversion
+                  ? Text(
+                      progress,
+                      style: TextStyle(
+                        fontSize: 17,
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? darkColorScheme.primary
+                            : lightColorScheme.primary,
+                      ),
+                    )
                   : Container(),
             ],
           ),

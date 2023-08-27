@@ -21,20 +21,23 @@ String trimLocation(String longString) {
 }
 
 Future<String?> mediaConvert(String fileLocation) async {
-  String fileFlac =
-      '${fileLocation.substring(0, fileLocation.lastIndexOf('.') + 1)}flac';
-  fileFlac = fileFlac.replaceAll(" ", "");
-  try {
-    final session = await FFmpegKit.execute(
-        '-i \'$fileLocation\' -vn -c:a -acodec flac $fileFlac');
-    final returnCode = await session.getReturnCode();
-    if (ReturnCode.isSuccess(returnCode) || File(fileFlac).existsSync()) {
-      return fileFlac;
-    } else {
-      return '';
-    }
-  } catch (e) {}
-
+  if (fileLocation.substring(fileLocation.lastIndexOf('.') + 1) != 'flac') {
+    String fileFlac =
+        '${fileLocation.substring(0, fileLocation.lastIndexOf('.') + 1)}flac';
+    fileFlac = fileFlac.replaceAll(" ", "");
+    try {
+      final session = await FFmpegKit.execute(
+          '-i \'$fileLocation\' -vn -acodec flac $fileFlac');
+      final returnCode = await session.getReturnCode();
+      if (ReturnCode.isSuccess(returnCode) || File(fileFlac).existsSync()) {
+        return fileFlac;
+      } else {
+        return '';
+      }
+    } catch (e) {}
+  } else {
+    return fileLocation;
+  }
   return null;
 }
 

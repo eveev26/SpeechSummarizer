@@ -35,7 +35,9 @@ class _UploadCardState extends State<UploadCard> {
               //   style: TextStyle(fontSize: 20),
               // ),
               Text(
-                widget.filename,
+                (widget.filename.length > 29)
+                    ? '${widget.filename.substring(0, 20)}...${widget.filename.substring(widget.filename.length - 7)}'
+                    : widget.filename,
                 style: const TextStyle(fontSize: 20),
               ),
               const SizedBox(

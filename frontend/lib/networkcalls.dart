@@ -23,15 +23,15 @@ String trimLocation(String longString) {
 Future<String?> mediaConvert(String fileLocation) async {
   String fileFlac =
       '${fileLocation.substring(0, fileLocation.lastIndexOf('.') + 1)}flac';
-
+  fileFlac = fileFlac.replaceAll(" ", "");
   try {
-    final session =
-        await FFmpegKit.execute('-i $fileLocation -acodec flac $fileFlac');
+    final session = await FFmpegKit.execute(
+        '-i \'$fileLocation\' -vn -c:a -acodec flac $fileFlac');
     final returnCode = await session.getReturnCode();
-    if (ReturnCode.isSuccess(returnCode)) {
+    if (ReturnCode.isSuccess(returnCode) || File(fileFlac).existsSync()) {
       return fileFlac;
     } else {
-      return fileFlac;
+      return '';
     }
   } catch (e) {}
 
@@ -54,7 +54,6 @@ Future<bool> gbucketUpload(String flacLocation) async {
   request.headers.addAll(headers);
   http.StreamedResponse response = await request.send();
   if (response.statusCode == 200) {
-    print('done pushing');
     return true;
   } else {
     return false;
@@ -66,20 +65,16 @@ Future<String?> audiosummarizer(String filename) async {
   final url = Uri.parse('http://34.134.208.93:3002/speech-to-text');
   final headers = {
     'Content-Type': 'application/json',
-    // Add any other headers as needed
   };
   final body = jsonEncode({
     'file_url': gbucketlocation,
-    // Add more key-value pairs as needed
   });
-  print(gbucketlocation);
+
   final response = await http.post(url, headers: headers, body: body);
   if (response.statusCode == 200 || response.statusCode == 201) {
-    print('Worked: ${response.statusCode}');
     final responseBody = json.decode(response.body);
-    print(responseBody.toString());
+
     return responseBody.toString();
-  } else {
-    print('Failed: ${response.statusCode}');
-  }
+  } else {}
+  return null;
 }

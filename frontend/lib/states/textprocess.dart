@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:speechsummarizer/networkcalls.dart';
+import 'package:speechsummarizer/states/fileselection.dart';
 import 'package:speechsummarizer/states/summaryscreen.dart';
+import 'package:speechsummarizer/color_schemes.g.dart';
 
 class TextProcess extends StatefulWidget {
   final String filelocation;
@@ -10,53 +12,33 @@ class TextProcess extends StatefulWidget {
   State<TextProcess> createState() => _TextProcessState();
 }
 
-class _TextProcessState extends State<TextProcess>
-    with TickerProviderStateMixin {
-  late AnimationController controller;
+class _TextProcessState extends State<TextProcess> {
   double progress = 0;
   String? flaclocation;
   bool flacconversion = false;
   late String summary;
   @override
   void initState() {
-    controller = AnimationController(
-      /// [AnimationController]s can be created with `vsync: this` because of
-      /// [TickerProviderStateMixin].
-      vsync: this,
-      duration: const Duration(seconds: 1),
-    )..addListener(() {
-        setState(() {});
-      });
     mediaConvert(widget.filelocation).then((value) {
-      if (value != null) {
+      if (value != null && value != '') {
         setState(() {
           flaclocation = value;
-          controller.animateTo(0.25,
-              duration: const Duration(seconds: 1),
-              curve: Curves.fastEaseInToSlowEaseOut);
         });
-        print(flaclocation);
+
         gbucketUpload(flaclocation!).then((value) {
           if (value) {
-            setState(() {
-              controller.animateTo(0.5,
-                  duration: const Duration(seconds: 1),
-                  curve: Curves.fastEaseInToSlowEaseOut);
-            });
             audiosummarizer(trimLocation(flaclocation!)).then((value) {
               setState(() {
                 summary = value!;
-                controller.animateTo(1,
-                    duration: const Duration(seconds: 1),
-                    curve: Curves.fastEaseInToSlowEaseOut);
               });
-              print(summary);
               Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => SummaryScreen(
-                            summary: summary,
-                          )));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SummaryScreen(
+                    summary: summary,
+                  ),
+                ),
+              );
             });
           }
         });
@@ -66,26 +48,88 @@ class _TextProcessState extends State<TextProcess>
         });
       }
     });
-    super.initState();
-  }
 
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
+        child: SafeArea(
+            child: Align(
+          alignment: Alignment.center,
           child: Column(
-        children: <Widget>[
-          LinearProgressIndicator(
-            value: controller.value,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              flacconversion
+                  ? Container(
+                      padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Audio extraction failed, \nplease submit an audio file',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ],
+                      ),
+                    )
+                  : Container(),
+              flacconversion
+                  ? const SizedBox(
+                      height: 15,
+                    )
+                  : Container(),
+              flacconversion
+                  ? SizedBox(
+                      height: 65,
+                      width: MediaQuery.of(context).size.width,
+                      child: FilledButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const FileSelection()));
+                        },
+                        child: const Text(
+                          'Try Again',
+                          style: TextStyle(fontSize: 23),
+                        ),
+                      ),
+                    )
+                  : Container(),
+              !flacconversion
+                  ? const SizedBox(
+                      height: 100,
+                      width: 100,
+                      child: CircularProgressIndicator())
+                  : Container(),
+              !flacconversion
+                  ? const SizedBox(
+                      height: 20,
+                    )
+                  : Container(),
+              !flacconversion
+                  ? Text('Loading',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? darkColorScheme.primary
+                            : lightColorScheme.primary,
+                      ))
+                  : Container(),
+            ],
           ),
-        ],
-      )),
+        )),
+      ),
     );
   }
 }

@@ -31,7 +31,6 @@ Future<String?> mediaConvert(String fileLocation) async {
     if (ReturnCode.isSuccess(returnCode) || File(fileFlac).existsSync()) {
       return fileFlac;
     } else {
-      print('FAILED');
       return '';
     }
   } catch (e) {}
@@ -50,13 +49,11 @@ Future<bool> gbucketUpload(String flacLocation) async {
       'https://storage.googleapis.com/upload/storage/v1/b/audio-file-hackathon/o?uploadType=media&name=${Uri.encodeComponent(trimLocation(flacLocation))}',
     ),
   );
-  print(flacLocation);
   List<int> binaryData = await File(flacLocation).readAsBytes();
   request.bodyBytes = binaryData;
   request.headers.addAll(headers);
   http.StreamedResponse response = await request.send();
   if (response.statusCode == 200) {
-    print('done pushing');
     return true;
   } else {
     return false;
@@ -72,14 +69,12 @@ Future<String?> audiosummarizer(String filename) async {
   final body = jsonEncode({
     'file_url': gbucketlocation,
   });
-  print(gbucketlocation);
+
   final response = await http.post(url, headers: headers, body: body);
   if (response.statusCode == 200 || response.statusCode == 201) {
-    print('Worked: ${response.statusCode}');
     final responseBody = json.decode(response.body);
-    print(responseBody.toString());
+
     return responseBody.toString();
-  } else {
-    print('Failed: ${response.statusCode}');
-  }
+  } else {}
+  return null;
 }

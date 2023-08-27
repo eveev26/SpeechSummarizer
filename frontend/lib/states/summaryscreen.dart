@@ -4,7 +4,7 @@ import 'package:speechsummarizer/states/fileselection.dart';
 
 class SummaryScreen extends StatefulWidget {
   final String summary;
-  SummaryScreen({super.key, required this.summary});
+  const SummaryScreen({super.key, required this.summary});
 
   @override
   State<SummaryScreen> createState() => _SummaryScreenState();
